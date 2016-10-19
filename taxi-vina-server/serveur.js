@@ -15,6 +15,7 @@ let file_path_clients = '/Users/quangminhnguyen/Documents/M2-PLS/jsau/projet/tax
 
 let file_path_drivers = '/Users/quangminhnguyen/Documents/M2-PLS/jsau/projet/taxi-vina-server/Drivers.json'
     //let text_drivers = '/Users/quangminhnguyen/Documents/M2-PLS/jsau/projet/taxi-vina-server/textDriver.txt'
+let temp = {}
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
@@ -31,14 +32,20 @@ app.route('/')
 app.route('/clients')
         .get((req, res) => {
 
-            let temp = req.body
-            if(validator.isEmail(temp.email)){
+            temp = req.body
+            let verif = validator.isEmail(temp.email)
+            console.log('temp')
+            if(verif){
                 fs.readFile(file_path_clients, (err, data) => {
                   if (err) {throw err}
                   let clients = JSON.parse(data).clients
-                  for(let i=0; i)
-                  res.send('Affichage la liste des clients \n' + JSON.stringify(JSON.parse(data).clients))
+                  for(let i=0; i<clients.length; i++)
+                    if(clients[i].email==temp.email)
+                  res.send('Affichage la fiche du client clients \n' + JSON.stringify(JSON.parse(clients[i])))
                 })
+            }
+            else {
+                res.sendFile('/Users/quangminhnguyen/Documents/M2-PLS/jsau/projet/taxi-vina-server' + '/importante.html')
             }
         })
 
