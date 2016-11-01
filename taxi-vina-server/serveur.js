@@ -4,17 +4,23 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const validator = require('validator')
+const path = require('path')
+const cors = require('cors')
+
+//crossed domains
+app.use(cors())
+
 let fs = require('fs')
     //let jsonfile = require('jsonfile')
     /*let obj={ id : 1234,
                 name : "NGUYEN",
                 firstname : "Jimmy"
               }*/
-let file_path_clients = '/Users/quangminhnguyen/Documents/M2-PLS/jsau/projet/taxi-vina-server/Clients.json'
-    //let text_clients = '/Users/quangminhnguyen/Documents/M2-PLS/jsau/projet/taxi-vina-server/text.txt'
+let file_path_clients = path.resolve() + '/Clients.json'
+    //let text_clients = path.resolve() + '/text.txt'
 
-let file_path_drivers = '/Users/quangminhnguyen/Documents/M2-PLS/jsau/projet/taxi-vina-server/Drivers.json'
-    //let text_drivers = '/Users/quangminhnguyen/Documents/M2-PLS/jsau/projet/taxi-vina-server/textDriver.txt'
+let file_path_drivers = path.resolve() + '/Drivers.json'
+    //let text_drivers = path.resolve() + '/textDriver.txt'
 let temp = {}
 
 app.use(bodyParser.json())
@@ -26,15 +32,15 @@ app.listen(3000, () => {
 
 app.route('/')
     .get((req, res) => {
-        res.sendFile('/Users/quangminhnguyen/Documents/M2-PLS/jsau/projet/taxi-vina-server' + '/index.html')
+        res.sendFile(path.resolve() + '/index.html')
     })
 
 app.route('/clients')
         .get((req, res) => {
 
             temp = req.body
+            console.log(req.body)
             let verif = validator.isEmail(temp.email)
-            console.log('temp')
             if(verif){
                 fs.readFile(file_path_clients, (err, data) => {
                   if (err) {throw err}
@@ -45,13 +51,13 @@ app.route('/clients')
                 })
             }
             else {
-                res.sendFile('/Users/quangminhnguyen/Documents/M2-PLS/jsau/projet/taxi-vina-server' + '/importante.html')
+                res.sendFile(path.resolve() + '/importante.html')
             }
         })
 
 app.route('/clients')
         .post((req, res) => {
-             //res.send('Creation la liste des clients')
+/*             //res.send('Creation la liste des clients')
             let newClient = req.body
             let contain = JSON.parse(fs.readFile(file_path_clients))
             let arrClients = contain.clients
@@ -70,7 +76,35 @@ app.route('/clients')
                 console.log('It\'s saved!')
 
             })
-            res.send('Creation du client : ' + '\n')
+            res.send('Creation du client : ' + '\n')*/
+            temp = req.body
+            let verif = validator.isEmail(temp.email)
+            console.log('temp')
+            if(verif){
+                fs.readFile(file_path_clients, (err, data) => {
+                  if (err) {throw err}
+		  let flag = false
+		  let dataReturned = {}
+                  let clients = JSON.parse(data).clients
+                  for(let i=0; i<clients.length; i++)
+                    if(clients[i].email==temp.email){
+			   console.log(clients[i])
+			   dataReturned.flag=1
+			   dataReturned.client=clients[i]
+                           res.send(JSON.stringify(dataReturned))
+			   //res.send(JSON.parse(dataReturned)
+			   flag=true;
+		    }
+		  if(!flag){
+			dataReturned.flag=-1
+			dataReturned.client="aucune"
+			res.send(JSON.stringify(dataReturned))
+		  }
+                })
+            }
+            else {
+                res.sendFile(path.resolve() + '/importante.html')
+            }
 
         })
 
