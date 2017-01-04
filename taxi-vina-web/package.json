@@ -15,7 +15,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/app.js",
     "build": "npm run build.js",
-    "build.js": "browserify src/resource/js/client.js > src/resource/js/bundle.js",
+    "build.js": "browserify src/resource/js/index.js > src/resource/js/bundle.js",
     "start:watch": "nodemon"
   },
   "author": "",

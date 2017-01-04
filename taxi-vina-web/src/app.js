@@ -21,12 +21,26 @@ app.use('/resource/css', express.static(path.join(__dirname, 'resource/css')))
 app.use('/resource/img', express.static(path.join(__dirname, 'resource/img')))
 
 app.route('/')
-    .get((req, res) => {
-        res.sendFile(path.resolve() + '/src/resource/index.html')
-    })
+  .get((req, res) => {
+      res.sendFile(path.resolve() + '/src/resource/html/index.html')
+  })
 
-app.route('/clients')
+app.route('/client')
 	.get((req, res) => {
-        res.sendFile(path.resolve() + '/src/resource/clients.html')
-    })
+      res.sendFile(path.resolve() + '/src/resource/html/client.html')
+  })
 
+app.route('/driver')
+	.get((req, res) => {
+      res.sendFile(path.resolve() + '/src/resource/html/driver.html')
+  })
+
+app.route('/booking')
+	.get((req, res) => {
+      res.sendFile(path.resolve() + '/src/resource/html/booking.html')
+  })
+
+app.route('/bookingAdmin')
+	.get((req, res) => {
+      res.sendFile(path.resolve() + '/src/resource/html/bookingAdmin.html')
+  })
